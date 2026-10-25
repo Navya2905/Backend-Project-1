@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Secrets - never commit real env files
+.env
+.env.*
+!.env.example
+
+# Test coverage
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Uploaded files during local development (Phase 3)
+uploads/
+
+# OS / editor junk
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
