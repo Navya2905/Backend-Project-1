@@ -2,15 +2,10 @@ import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import type { App } from 'supertest/types';
-import { applyTestEnv } from './test-env';
-
-applyTestEnv();
+import { AppModule } from '../src/app.module';
+import { configureApp } from '../src/app.setup';
 
 export async function createTestApp(): Promise<INestApplication<App>> {
-  // Imported after applyTestEnv() so ConfigModule sees the test settings.
-  const { AppModule } = await import('../src/app.module');
-  const { configureApp } = await import('../src/app.setup');
-
   const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
   const app = moduleRef.createNestApplication<INestApplication<App>>();
   configureApp(app);

@@ -10,6 +10,7 @@ export function applyTestEnv(): void {
   process.env.JWT_SECRET = 'test-secret-that-is-at-least-32-characters-long';
   process.env.EMBEDDING_PROVIDER = 'local';
   process.env.LLM_PROVIDER = 'local';
-  process.env.QUEUE_MODE = 'inline';
+  process.env.QUEUE_PREFIX = 'documind-test';
+  process.env.MAX_UPLOAD_MB = '1';
   process.env.UPLOAD_DIR = process.env.UPLOAD_DIR ?? `${__dirname}/../.test-uploads`;
 }
