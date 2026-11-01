@@ -36,7 +36,9 @@ export function chunkPages(pages: PageText[], options: ChunkOptions = {}): TextC
 // PDF text arrives with hard line breaks and hyphenated words split across lines.
 export function cleanText(text: string): string {
   return text
-    .replace(/\u0000/g, '') // Postgres text columns can't store NUL characters
+    // Postgres text columns can't store NUL characters.
+    // oxlint-disable-next-line no-control-regex
+    .replace(/\u0000/g, '')
     .replace(/(\w)-\n(\w)/g, '$1$2')
     .replace(/\s+/g, ' ')
     .trim();
@@ -74,7 +76,7 @@ function chunkText(text: string, maxWords: number, overlapWords: number): string
 }
 
 function splitSentences(text: string): string[] {
-  return text.split(/(?<=[.!?])\s+(?=["'(\[]?[A-Z0-9])/).filter((s) => s.length > 0);
+  return text.split(/(?<=[.!?])\s+(?=["'([]?[A-Z0-9])/).filter((s) => s.length > 0);
 }
 
 // A "sentence" longer than a whole chunk (tables, lists without punctuation) is cut by words.

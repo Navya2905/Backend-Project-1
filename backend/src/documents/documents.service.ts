@@ -138,6 +138,7 @@ export class DocumentsService {
 // Keep only a display name: no directories, no control characters, bounded length.
 function safeFilename(original: string): string {
   const base = path.basename(original.replace(/\\/g, '/'));
+  // oxlint-disable-next-line no-control-regex -- stripping control characters is the point
   const cleaned = base.replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, 255);
   return cleaned || 'document.pdf';
 }

@@ -21,7 +21,7 @@ export class LocalEmbeddingProvider extends EmbeddingProvider {
   }
 
   private embedOne(text: string): number[] {
-    const vector = new Array<number>(EMBEDDING_DIMENSIONS).fill(0);
+    const vector = Array.from({ length: EMBEDDING_DIMENSIONS }, () => 0);
     const words = (text.toLowerCase().match(/[a-z0-9]+/g) ?? []).filter((w) => !STOP_WORDS.has(w)).map(stem);
 
     const add = (feature: string, weight: number) => {

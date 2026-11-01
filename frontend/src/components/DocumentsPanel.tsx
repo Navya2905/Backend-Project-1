@@ -28,6 +28,7 @@ export function DocumentsPanel({ workspace, userId }: { workspace: Workspace; us
   }, [workspace.id])
 
   useEffect(() => {
+    // oxlint-disable-next-line react/set-state-in-effect -- fetching data, not deriving state
     void load()
   }, [load])
 

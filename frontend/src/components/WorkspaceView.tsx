@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { ApiError, api } from '../api'
 import type { User, Workspace } from '../types'
 import { AskPanel } from './AskPanel'
@@ -13,11 +13,8 @@ interface Props {
 
 export function WorkspaceView({ user, workspaces, onWorkspacesChanged, onSignOut }: Props) {
   const [workspaceId, setWorkspaceId] = useState(workspaces[0]?.id ?? '')
+  // Falls back to the first workspace if the selected one disappears.
   const workspace = workspaces.find((w) => w.id === workspaceId) ?? workspaces[0]
-
-  useEffect(() => {
-    if (!workspaces.some((w) => w.id === workspaceId) && workspaces[0]) setWorkspaceId(workspaces[0].id)
-  }, [workspaces, workspaceId])
 
   const createWorkspace = async () => {
     const name = window.prompt('Name for the new workspace')?.trim()

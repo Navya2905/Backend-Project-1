@@ -22,7 +22,9 @@ export default function App() {
     }
   }, [])
 
+  // Restore the session on first load. (This is data fetching, which the rule below doesn't model.)
   useEffect(() => {
+    // oxlint-disable-next-line react/set-state-in-effect
     if (getToken()) void loadSession()
   }, [loadSession])
 
