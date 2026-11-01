@@ -1,4 +1,4 @@
-import { EMBEDDING_DIMENSIONS, EmbeddingProvider } from './embedding.provider';
+import { EMBEDDING_DIMENSIONS, EmbeddingKind, EmbeddingProvider } from './embedding.provider';
 
 const STOP_WORDS = new Set(
   'a an and are as at be by can do does for from get got had has have how i if in is it its me my no not of on or our so than that the their them then there these they this to was we were what when where which who why will with you your'.split(
@@ -15,7 +15,8 @@ const STOP_WORDS = new Set(
 export class LocalEmbeddingProvider extends EmbeddingProvider {
   readonly model = 'local-hash-v1';
 
-  embed(texts: string[]): Promise<number[][]> {
+  // Documents and queries are embedded the same way here, so `kind` is unused.
+  embed(texts: string[], _kind?: EmbeddingKind): Promise<number[][]> {
     return Promise.resolve(texts.map((text) => this.embedOne(text)));
   }
 

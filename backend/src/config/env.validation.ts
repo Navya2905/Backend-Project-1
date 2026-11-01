@@ -41,6 +41,11 @@ export function validateEnv(env: Record<string, unknown>): Record<string, unknow
     if (value !== undefined && !/^\d+$/.test(value)) errors.push(`${key} must be a whole number`);
   }
 
+  const minSimilarity = str('RETRIEVAL_MIN_SIMILARITY');
+  if (minSimilarity !== undefined && !(Number(minSimilarity) >= 0 && Number(minSimilarity) <= 1)) {
+    errors.push('RETRIEVAL_MIN_SIMILARITY must be a number between 0 and 1');
+  }
+
   if (errors.length > 0) {
     throw new Error(`Invalid configuration:\n  - ${errors.join('\n  - ')}`);
   }
