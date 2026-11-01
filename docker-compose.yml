@@ -1,3 +1,7 @@
+# Development:      docker compose up -d                      (database + Redis only;
+#                   run the backend and frontend with npm on your machine)
+# Whole app:        docker compose --profile app up --build   (then open http://localhost:8080)
+
 services:
   db:
     image: pgvector/pgvector:pg17
@@ -27,5 +31,41 @@ services:
       timeout: 3s
       retries: 10
 
+  backend:
+    profiles: ["app"]
+    build: ./backend
+    container_name: documind-backend
+    # Secrets (JWT_SECRET, AI keys) come from backend/.env ...
+    env_file: ./backend/.env
+    # ... while these point at the other containers instead of localhost.
+    environment:
+      DATABASE_URL: postgresql://documind:documind_dev_password@db:5432/documind
+      REDIS_URL: redis://redis:6379
+      UPLOAD_DIR: /app/uploads
+      TRUST_PROXY: "1"
+    volumes:
+      - uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  frontend:
+    profiles: ["app"]
+    build: ./frontend
+    container_name: documind-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+
 volumes:
-    pgdata:
+  pgdata:
+  uploads:
