@@ -11,12 +11,13 @@ const extractPages = pdfText.extractPages as jest.MockedFunction<typeof pdfText.
 
 function setup(embed: jest.Mock) {
   const queries: string[] = [];
+  const query = jest.fn(async (sql: string): Promise<unknown[]> => {
+    queries.push(sql);
+    return sql.includes('RETURNING workspace_id') ? [{ workspace_id: 'ws', storage_key: 'ws/doc.pdf' }] : [];
+  });
   const db = {
-    query: jest.fn(async (sql: string) => {
-      queries.push(sql);
-      return sql.includes('RETURNING workspace_id') ? [{ workspace_id: 'ws', storage_key: 'ws/doc.pdf' }] : [];
-    }),
-    transaction: jest.fn(async (work: (q: unknown) => Promise<unknown>) => work(db.query)),
+    query,
+    transaction: jest.fn(async (work: (q: typeof query) => Promise<unknown>) => work(query)),
   };
   const storage = { read: jest.fn().mockResolvedValue(Buffer.from('%PDF-')) };
   const embeddings = { model: 'test-model', embed };
